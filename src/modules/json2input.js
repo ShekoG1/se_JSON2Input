@@ -4,6 +4,7 @@ class JSON2Input {
     constructor(data, disableDefaultStyling = false) {
         this.data = data;
         this.disableDefaultStyling = disableDefaultStyling;
+        this.currentData = data;
     }
 
     render() {
@@ -11,12 +12,23 @@ class JSON2Input {
             <JSON2InputRenderer
                 data={this.data}
                 disableDefaultStyling={this.disableDefaultStyling}
+                onDataChange={(data) => {
+                    this.currentData = data;
+                }}
             />
         );
     }
+
+    getData() {
+        return this.currentData;
+    }
 }
 
-function JSON2InputRenderer({ data, disableDefaultStyling }) {
+function JSON2InputRenderer({
+    data,
+    disableDefaultStyling,
+    onDataChange
+}) {
     const [formData, setFormData] = useState(data);
 
     const updateValue = (path, value) => {
@@ -30,6 +42,8 @@ function JSON2InputRenderer({ data, disableDefaultStyling }) {
             }
 
             target[path[path.length - 1]] = value;
+
+            onDataChange(updatedData);
 
             return updatedData;
         });
@@ -46,6 +60,8 @@ function JSON2InputRenderer({ data, disableDefaultStyling }) {
             }
 
             target.push("");
+
+            onDataChange(updatedData);
 
             return updatedData;
         });

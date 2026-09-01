@@ -1,6 +1,9 @@
 import './App.css';
 import JSON2Input from './modules/json2input';
 
+// Test Data
+import config from "./data/config.json";
+
 function App() {
 
     const testData = {
@@ -9,7 +12,8 @@ function App() {
         address: ""
     };
 
-    const form = new JSON2Input(testData);
+    // const form = new JSON2Input(testData);
+    const form = new JSON2Input(config);
 
     const handleGetData = () => {
         console.log(form.getData());

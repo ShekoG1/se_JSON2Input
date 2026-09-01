@@ -22,16 +22,16 @@ function App() {
     return (
         <div className="App">
             <div style={{ padding: '200px' }}>
-
                 {form.render()}
 
                 <button
                     type="button"
-                    onClick={handleGetData}
+                    onClick={() => {
+                        console.log(form.getData());
+                    }}
                 >
                     Get Data
                 </button>
-
             </div>
         </div>
     );

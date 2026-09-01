@@ -1,5 +1,5 @@
 {
-  "name": "se_json2input",
+  "name": "json2input",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

@@ -2,16 +2,13 @@
   "name": "json2input",
   "version": "1.0.0",
   "description": "Generate dynamic React inputs from JSON data.",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
+  "main": "./dist/json2input.js",
+  "module": "./dist/json2input.js",
   "exports": {
-    ".": "./dist/index.js"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "vite build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+      ".": {
+          "import": "./dist/json2input.js",
+          "default": "./dist/json2input.js"
+      }
   },
   "files": [
     "dist",
@@ -21,5 +18,18 @@
   "peerDependencies": {
     "react": ">=18",
     "react-dom": ">=18"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "node build.js",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "dependencies": {
   }
 }

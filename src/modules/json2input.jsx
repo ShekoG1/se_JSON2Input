@@ -45,6 +45,9 @@ function JSON2InputRenderer({
      * }
      */
     const arrayTemplates = useRef({});
+    const onClickHideContainer = (e) => {
+        console.log("onClickHideContainer", e.target);
+    }
 
     dataRef.current = formData;
 
@@ -232,6 +235,7 @@ function JSON2InputRenderer({
                 return (
                     <div
                         id={`json2input-${key}-container`}
+                        onClick={onClickHideContainer}
                         key={currentPath.join(".")}
                         {...(
                             disableDefaultStyling
@@ -243,12 +247,13 @@ function JSON2InputRenderer({
                                 }
                         )}
                     >
-                        <label>
+                        <label data-key={key} >
                             {formatLabel(key)}
                         </label>
 
                         <div
                             id={`json2input-${key}-object-container`}
+                            onClick={onClickHideContainer}
                             {...(
                                 disableDefaultStyling
                                     ? {}
@@ -285,6 +290,7 @@ function JSON2InputRenderer({
         return (
             <div
                 id={`json2input-${key}-array-container`}
+                onClick={onClickHideContainer}
                 key={path.join(".")}
                 {...(
                     disableDefaultStyling
@@ -325,6 +331,7 @@ function JSON2InputRenderer({
                             <div
                                 key={currentPath.join(".")}
                                 id={`json2input-${key}-object-container`}
+                                onclick={onClickHideContainer}
                             >
                                 {renderObject(
                                     value,
@@ -382,6 +389,7 @@ function JSON2InputRenderer({
             <div
                 key={path.join(".")}
                 id={`json2input-${key}-single-container`}
+                onClick={onClickHideContainer}
                 {...(
                     disableDefaultStyling
                         ? {}
@@ -392,7 +400,7 @@ function JSON2InputRenderer({
                         }
                 )}
             >
-                <label>
+                <label data-key={key}>
                     {formatLabel(key)}
                 </label>
 

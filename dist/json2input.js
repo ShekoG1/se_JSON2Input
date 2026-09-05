@@ -28,6 +28,9 @@ function JSON2InputRenderer({
 }) {
   const [formData, setFormData] = useState(data);
   const arrayTemplates = useRef({});
+  const onClickHideContainer = (e) => {
+    console.log("onClickHideContainer", e.target);
+  };
   dataRef.current = formData;
   const cloneData = (value) => {
     return JSON.parse(JSON.stringify(value));
@@ -112,17 +115,19 @@ function JSON2InputRenderer({
           "div",
           {
             id: `json2input-${key}-container`,
+            onClick: onClickHideContainer,
             ...disableDefaultStyling ? {} : {
               style: {
                 marginLeft: "20px"
               }
             },
             children: [
-              /* @__PURE__ */ jsx("label", { children: formatLabel(key) }),
+              /* @__PURE__ */ jsx("label", { "data-key": key, children: formatLabel(key) }),
               /* @__PURE__ */ jsx(
                 "div",
                 {
                   id: `json2input-${key}-object-container`,
+                  onClick: onClickHideContainer,
                   ...disableDefaultStyling ? {} : {
                     style: {
                       marginLeft: "20px"
@@ -151,6 +156,7 @@ function JSON2InputRenderer({
       "div",
       {
         id: `json2input-${key}-array-container`,
+        onClick: onClickHideContainer,
         ...disableDefaultStyling ? {} : {
           style: {
             marginBottom: "20px"
@@ -175,6 +181,7 @@ function JSON2InputRenderer({
                 "div",
                 {
                   id: `json2input-${key}-object-container`,
+                  onclick: onClickHideContainer,
                   children: renderObject(
                     value,
                     currentPath
@@ -224,13 +231,14 @@ function JSON2InputRenderer({
       "div",
       {
         id: `json2input-${key}-single-container`,
+        onClick: onClickHideContainer,
         ...disableDefaultStyling ? {} : {
           style: {
             marginBottom: "15px"
           }
         },
         children: [
-          /* @__PURE__ */ jsx("label", { children: formatLabel(key) }),
+          /* @__PURE__ */ jsx("label", { "data-key": key, children: formatLabel(key) }),
           /* @__PURE__ */ jsx(
             "input",
             {

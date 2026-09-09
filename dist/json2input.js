@@ -29,7 +29,24 @@ function JSON2InputRenderer({
   const [formData, setFormData] = useState(data);
   const arrayTemplates = useRef({});
   const onClickHideContainer = (e) => {
-    console.log("onClickHideContainer", e.target);
+    console.log("target:", e.target);
+    console.log("currentTarget:", e.currentTarget);
+    console.log("dataset:", e.currentTarget.dataset);
+    console.log("elementtest:", e.currentTarget.dataset.elementtest);
+    if (e.currentTarget.dataset.elementtest) {
+      const helperSpan = e.currentTarget.querySelector("span");
+      if (helperSpan) {
+        if (helperSpan.textContent === "Hide") {
+          helperSpan.textContent = "Show";
+        } else {
+          helperSpan.textContent = "Hide";
+        }
+      }
+      var containerToToggle = document.getElementById(`json2input-${e.currentTarget.dataset.elementtest}-array-items-container`);
+      if (containerToToggle) {
+        containerToToggle.style.display = containerToToggle.style.display === "none" ? "block" : "none";
+      }
+    }
   };
   dataRef.current = formData;
   const cloneData = (value) => {
@@ -115,19 +132,17 @@ function JSON2InputRenderer({
           "div",
           {
             id: `json2input-${key}-container`,
-            onClick: onClickHideContainer,
             ...disableDefaultStyling ? {} : {
               style: {
                 marginLeft: "20px"
               }
             },
             children: [
-              /* @__PURE__ */ jsx("label", { "data-key": key, children: formatLabel(key) }),
+              /* @__PURE__ */ jsx("label", { onClick: onClickHideContainer, "data-elementtest": key, children: formatLabel(key) }),
               /* @__PURE__ */ jsx(
                 "div",
                 {
                   id: `json2input-${key}-object-container`,
-                  onClick: onClickHideContainer,
                   ...disableDefaultStyling ? {} : {
                     style: {
                       marginLeft: "20px"
@@ -156,68 +171,77 @@ function JSON2InputRenderer({
       "div",
       {
         id: `json2input-${key}-array-container`,
-        onClick: onClickHideContainer,
         ...disableDefaultStyling ? {} : {
           style: {
             marginBottom: "20px"
           }
         },
         children: [
-          /* @__PURE__ */ jsx("label", { children: formatLabel(key) }),
-          values.map((value, index) => {
-            const currentPath = [
-              ...path,
-              index
-            ];
-            if (Array.isArray(value)) {
-              return renderArray(
-                `${key}-${index}`,
-                value,
-                currentPath
-              );
-            }
-            if (typeof value === "object" && value !== null) {
-              return /* @__PURE__ */ jsx(
-                "div",
-                {
-                  id: `json2input-${key}-object-container`,
-                  onclick: onClickHideContainer,
-                  children: renderObject(
-                    value,
-                    currentPath
-                  )
-                },
-                currentPath.join(".")
-              );
-            }
-            return /* @__PURE__ */ jsx(
-              "input",
-              {
-                type: "text",
-                value: value ?? "",
-                onChange: (event) => updateValue(
-                  currentPath,
-                  event.target.value
-                ),
-                ...disableDefaultStyling ? {} : {
-                  style: {
-                    display: "block",
-                    marginBottom: "5px"
-                  }
-                }
-              },
-              currentPath.join(".")
-            );
-          }),
+          /* @__PURE__ */ jsxs("label", { onClick: onClickHideContainer, "data-elementtest": key, children: [
+            formatLabel(key),
+            /* @__PURE__ */ jsx("span", { style: { fontSize: "12px", marginLeft: "5px", cursor: "pointer", color: "blue" }, children: "Hide" })
+          ] }),
           /* @__PURE__ */ jsxs(
-            "button",
+            "div",
             {
-              id: `json2input-${key}-add-btn`,
-              type: "button",
-              onClick: () => addArrayItem(path),
+              id: `json2input-${key}-array-items-container`,
               children: [
-                "+ Add ",
-                key.charAt(0).toUpperCase() + key.slice(1)
+                values.map((value, index) => {
+                  const currentPath = [
+                    ...path,
+                    index
+                  ];
+                  if (Array.isArray(value)) {
+                    return renderArray(
+                      `${key}-${index}`,
+                      value,
+                      currentPath
+                    );
+                  }
+                  if (typeof value === "object" && value !== null) {
+                    return /* @__PURE__ */ jsx(
+                      "div",
+                      {
+                        id: `json2input-${key}-object-container`,
+                        children: renderObject(
+                          value,
+                          currentPath
+                        )
+                      },
+                      currentPath.join(".")
+                    );
+                  }
+                  return /* @__PURE__ */ jsx(
+                    "input",
+                    {
+                      type: "text",
+                      value: value ?? "",
+                      onChange: (event) => updateValue(
+                        currentPath,
+                        event.target.value
+                      ),
+                      ...disableDefaultStyling ? {} : {
+                        style: {
+                          display: "block",
+                          marginBottom: "5px"
+                        }
+                      }
+                    },
+                    currentPath.join(".")
+                  );
+                }),
+                /* @__PURE__ */ jsxs(
+                  "button",
+                  {
+                    id: `json2input-${key}-add-btn`,
+                    type: "button",
+                    onClick: () => addArrayItem(path),
+                    children: [
+                      "+ Add ",
+                      key.charAt(0).toUpperCase() + key.slice(1)
+                    ]
+                  }
+                )
               ]
             }
           )
@@ -231,14 +255,13 @@ function JSON2InputRenderer({
       "div",
       {
         id: `json2input-${key}-single-container`,
-        onClick: onClickHideContainer,
         ...disableDefaultStyling ? {} : {
           style: {
             marginBottom: "15px"
           }
         },
         children: [
-          /* @__PURE__ */ jsx("label", { "data-key": key, children: formatLabel(key) }),
+          /* @__PURE__ */ jsx("label", { onClick: onClickHideContainer, "data-elementtest": key, children: formatLabel(key) }),
           /* @__PURE__ */ jsx(
             "input",
             {

@@ -1,6 +1,6 @@
 {
   "name": "json2input",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Generate dynamic React inputs from JSON data.",
   "main": "./dist/json2input.js",
   "module": "./dist/json2input.js",

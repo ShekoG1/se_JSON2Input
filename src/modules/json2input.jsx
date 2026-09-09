@@ -45,8 +45,31 @@ function JSON2InputRenderer({
      * }
      */
     const arrayTemplates = useRef({});
+
+    // Handles clicks on labels to hide/show the corresponding container for array items.
     const onClickHideContainer = (e) => {
-        console.log("onClickHideContainer", e.target);
+        console.log("target:", e.target);
+        console.log("currentTarget:", e.currentTarget);
+        console.log("dataset:", e.currentTarget.dataset);
+        console.log("elementtest:", e.currentTarget.dataset.elementtest);
+
+        if (e.currentTarget.dataset.elementtest){
+
+            // Change text on helper span
+            const helperSpan = e.currentTarget.querySelector("span");
+            if (helperSpan) {
+                if (helperSpan.textContent === "Hide") {
+                    helperSpan.textContent = "Show";
+                } else {
+                    helperSpan.textContent = "Hide";
+                }
+            }
+
+            var containerToToggle = document.getElementById(`json2input-${e.currentTarget.dataset.elementtest}-array-items-container`);
+            if (containerToToggle) {
+                containerToToggle.style.display = containerToToggle.style.display === "none" ? "block" : "none";
+            }
+        }
     }
 
     dataRef.current = formData;
@@ -235,7 +258,7 @@ function JSON2InputRenderer({
                 return (
                     <div
                         id={`json2input-${key}-container`}
-                        onClick={onClickHideContainer}
+                        // onClick={onClickHideContainer}
                         key={currentPath.join(".")}
                         {...(
                             disableDefaultStyling
@@ -247,13 +270,13 @@ function JSON2InputRenderer({
                                 }
                         )}
                     >
-                        <label data-key={key} >
+                        <label onClick={onClickHideContainer} data-elementtest={key} >
                             {formatLabel(key)}
                         </label>
 
                         <div
                             id={`json2input-${key}-object-container`}
-                            onClick={onClickHideContainer}
+                            // onClick={onClickHideContainer}
                             {...(
                                 disableDefaultStyling
                                     ? {}
@@ -290,7 +313,7 @@ function JSON2InputRenderer({
         return (
             <div
                 id={`json2input-${key}-array-container`}
-                onClick={onClickHideContainer}
+                // onClick={onClickHideContainer}
                 key={path.join(".")}
                 {...(
                     disableDefaultStyling
@@ -302,10 +325,17 @@ function JSON2InputRenderer({
                         }
                 )}
             >
-                <label>
+                <label onClick={onClickHideContainer} data-elementtest={key}>
                     {formatLabel(key)}
+                    <span style={{ fontSize: "12px", marginLeft: "5px", cursor: "pointer", color: "blue" }}>
+                        Hide
+                    </span>
                 </label>
 
+                <div
+                    id={`json2input-${key}-array-items-container`}
+                    // onClick={onClickHideContainer}
+                >
                 {values.map((value, index) => {
 
                     const currentPath = [
@@ -331,7 +361,7 @@ function JSON2InputRenderer({
                             <div
                                 key={currentPath.join(".")}
                                 id={`json2input-${key}-object-container`}
-                                onclick={onClickHideContainer}
+                                // onclick={onClickHideContainer}
                             >
                                 {renderObject(
                                     value,
@@ -367,7 +397,19 @@ function JSON2InputRenderer({
                     );
                 })}
 
-                <button
+                    <button
+                        id={`json2input-${key}-add-btn`}
+                        type="button"
+                        onClick={() =>
+                            addArrayItem(path)
+                        }
+                    >
+                        + Add {key.charAt(0).toUpperCase() + key.slice(1)}
+                    </button>
+
+                </div>
+
+                {/* <button
                     id={`json2input-${key}-add-btn`}
                     type="button"
                     onClick={() =>
@@ -375,7 +417,7 @@ function JSON2InputRenderer({
                     }
                 >
                     + Add {key.charAt(0).toUpperCase() + key.slice(1)}
-                </button>
+                </button> */}
             </div>
         );
     };
@@ -389,7 +431,7 @@ function JSON2InputRenderer({
             <div
                 key={path.join(".")}
                 id={`json2input-${key}-single-container`}
-                onClick={onClickHideContainer}
+                // onClick={onClickHideContainer}
                 {...(
                     disableDefaultStyling
                         ? {}
@@ -400,7 +442,7 @@ function JSON2InputRenderer({
                         }
                 )}
             >
-                <label data-key={key}>
+                <label onClick={onClickHideContainer} data-elementtest={key}>
                     {formatLabel(key)}
                 </label>
 
